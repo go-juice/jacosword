@@ -2510,12 +2510,17 @@ const words= {
   "10/12/2030":"thowl"
 
   };
-const today = new Date(Date.now()).toLocaleString().split(',')[0];
-
-
 const COLORS = ["gray", "green", "yellow"];
-
 const randInt = (num) => Math.floor(Math.random() * num);
+
+// Function to get today's date in 'MM/DD/YYYY' format
+function getFormattedDate() {
+    const today = new Date();
+    const mm = String(today.getMonth() + 1); // January is 0!
+    const dd = String(today.getDate());
+    const yyyy = today.getFullYear();
+    return mm + '/' + dd + '/' + yyyy;
+  }
 
 async function animateBoxes() {
   let i = 60;
@@ -2564,8 +2569,8 @@ function onClick(evt) {
 
   animateBoxes();
 
-  
-  let word = words[today];
+  const today = getFormattedDate();
+  const word = words[today];
 
   window.setTimeout(() => {
     fillBoxes(word)

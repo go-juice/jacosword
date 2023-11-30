@@ -2580,7 +2580,7 @@ function onClick(evt) {
         againElt.classList.remove("hidden");
       })
       .catch((err) => {
-        console.error(err);
+        console.log(error(err));
       });
   }, 2000);
 }

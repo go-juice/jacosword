@@ -2562,7 +2562,7 @@ function onClick(evt) {
 
   animateBoxes();
   const today = new Date(Date.now()).toLocaleString().split(',')[0];
-  let word = words[today];
+  const word = words[today];
 
   window.setTimeout(() => {
     fillBoxes(word)
@@ -2571,8 +2571,6 @@ function onClick(evt) {
       })
       .catch((err) => {
         console.error(err);
-        var div = document.getElementById('result');
-        div.innerHTML += err;
       });
   }, 2000);
 }

@@ -2512,6 +2512,7 @@ const words= {
   };
 const today = new Date(Date.now()).toLocaleString().split(',')[0];
 
+
 const COLORS = ["gray", "green", "yellow"];
 
 const randInt = (num) => Math.floor(Math.random() * num);

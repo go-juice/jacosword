@@ -1,15 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Today's Word</title>
+    <title>Random starting word generator - Wordle</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:image" content="https://mrcoles.com/media/img/wordle/wordle-grid@2x.png" />
+    <meta name="twitter:image" content="https://mrcoles.com/media/img/wordle/wordle-grid@2x.png" />
+    <style>
+      html, body, div, h1, p { margin: 0; padding: 0; }
+      html, body {
+        height: 100%;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font: normal 24px/36px 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+        color: #333;
+      }
+      h1 {
+        font-size: 24px;
+        line-height: 36px;
+        margin-bottom: 24px;
+        text-align: center;
+        margin-top: 24px;
+      }
+      #wrap {
+        margin-top: auto;
+        margin-bottom: auto;
+        padding: 40px;
+      }
+      #main {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      button {
+        line-height: 54px;
+        height: 60px;
+        /*
+        border: 3px solid #16B514;
+        background-color: #77D477;
+        background-image: linear-gradient(#77D477, #16b514);
+        */
+        border: 3px solid #6aaa64;
+        background-color: #6aaa64;
+        background-image: linear-gradient(#75c775, #6aaa64);
+        text-shadow: -1px -1px 0 rgb(0 0 0 / 15%);
+        
+        border-radius: 3px;
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+        padding: 0 30px;
+        box-sizing: border-box;
+      }
+      .boxes {
+        display: flex;
+        justify-content: center;
+      }
+      .box {
+        width: 58px;
+        height: 58px;
+        line-height: 62px;
+        background: #fff;
+        border: 2px solid #d3d6da;
+        text-transform: uppercase;
+        font-size: 32px;
+        font-weight: bold;
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+      .box[data-color="green"] {
+        background: #6aaa64;
+        border-color: #6aaa64;
+      }
+      .box[data-color="yellow"] {
+        background: #c9b458;
+        border-color: #c9b458;
+      }
+      #again {
+        margin-top: 36px;
+        color: #d3d6da;
+      }
+      #again a {
+        text-decoration: none;
+        padding-left: 4px;
+        padding-right: 4px;
+      }
+      #copy,
+      #wordle {
+        color: #6aaa64;
+      }
+      #reset {
+        color: #c9b458;
+      }
+      #msg-wrap {
+        position: fixed;
+        top: 100px;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+      #msg {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 18px;
+        line-height: 24px;
+      }
+      footer {
+        margin-top: 36px;
+        margin-bottom: 24px;
+        text-align: center;
+      }
+      footer a {
+        color: #999;
+        text-decoration: none;
+      }
+      .hide {
+        display: none;
+      }
+      .hidden {
+        visibility: hidden;
+      }
+    </style>
 </head>
 <body>
-
-  <div id="todaysWord">
-    <!-- Today's word will be displayed here -->
+  <h1>Starting word generator</h1>
+  <div id="wrap">
+    <div id="main">
+      <div id="gen">
+        <button id="generate">Generate word</button>
+      </div>
+      <div id="result" class="hide">
+        <div class="boxes">
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+        </div>
+      </div>
+      <div id="again" class="hidden">
+        <a href="#" id="copy">Copy</a> | <a href="#" id="reset">Again</a> | <a id="wordle" href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener noreferrer">Wordle</a>
+      </div>
+    </div>
   </div>
-
-  <script src="script.js"></script>
+  <div id="msg-wrap">
+    <div id="msg" class="hide"></div>
+  </div>
+  <footer>
+    <a href="https://mrcoles.com/best-wordle-starting-word/">the best starting word…</a>
+  </footer>
+  <script src="main.js"></script>
 </body>
 </html>
+

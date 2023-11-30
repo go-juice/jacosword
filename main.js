@@ -1,16 +1,12 @@
 const today = new Date(Date.now()).toLocaleString().split(',')[0];
 
-let words
-let wotd
+let word
 
 fetch('./words.json')
     .then((response) => response.json())
-    .then((json) => wotd = json[today]);
-
-console.log(today);
+    .then((json) => word = json[today]);
 
 
-let ANSWER = "";
 const COLORS = ["gray", "green", "yellow"];
 
 const randInt = (num) => Math.floor(Math.random() * num);
@@ -63,8 +59,8 @@ function onClick(evt) {
   animateBoxes();
 
   // const index = randInt(words.length);
-  const word = words[today];
-  ANSWER = word;
+  // const word = words[today];
+  // ANSWER = word;
 
   window.setTimeout(() => {
     fillBoxes(word)
@@ -89,7 +85,7 @@ document.querySelector("#copy").addEventListener(
       alert("Copy not supported by your browser");
     } else {
       const msgElt = document.querySelector("#msg");
-      navigator.clipboard.writeText(ANSWER).then(
+      navigator.clipboard.writeText(word).then(
         function () {
           console.log("Async: Copying to clipboard was successful!");
           msgElt.textContent = "Copied";

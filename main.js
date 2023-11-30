@@ -2518,7 +2518,9 @@ let word = words[today];
 //     .then((response) => response.json())
 //     .then((json) => word = json[today])
 //     .then(() => alert(word));
+var div = document.getElementById('result');
 
+div.innerHTML += word;
 
 const COLORS = ["gray", "green", "yellow"];
 

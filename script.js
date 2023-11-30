@@ -2522,8 +2522,8 @@ function getFormattedDate() {
 
 // Function to display today's word on the webpage
 function displayTodaysWord() {
-//   const todaysWordElement = document.getElementById('todaysWord');
-  const today = new Date(Date.now()).toLocaleString().split(',')[0];
+  const todaysWordElement = document.getElementById('todaysWord');
+  const today = getFormattedDate();
 
   // Check if today's date has a word in the wordDateMap
   const todaysWord = wordDateMap[today];

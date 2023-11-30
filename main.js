@@ -12496,7 +12496,7 @@ let word = words[today];
 
 const COLORS = ["gray", "green", "yellow"];
 
-const randInt = (num) => Math.floor(Math.random() * num);
+// const randInt = (num) => Math.floor(Math.random() * num);
 
 async function animateBoxes() {
   let i = 60;
@@ -12521,7 +12521,7 @@ async function fillBoxes(word) {
     const box = boxes[i];
     box.textContent = word.substring(i, i + 1);
     box.setAttribute("data-color", "gray");
-    await sleep(400);
+    await sleep(200);
   }
 }
 
@@ -12557,7 +12557,7 @@ function onClick(evt) {
       .catch((err) => {
         console.error(err);
       });
-  }, 5000);
+  }, 1000);
 }
 
 document.querySelector("#generate").addEventListener("click", onClick, false);

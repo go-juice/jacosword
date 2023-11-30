@@ -2520,7 +2520,7 @@ let word = words[today];
 //     .then(() => alert(word));
 var div = document.getElementById('result');
 
-div.innerHTML += word;
+div.innerHTML += today;
 
 const COLORS = ["gray", "green", "yellow"];
 

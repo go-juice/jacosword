@@ -2564,6 +2564,7 @@ function onClick(evt) {
 
   animateBoxes();
 
+  
   let word = words[today];
 
   window.setTimeout(() => {

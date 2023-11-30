@@ -1,10 +1,11 @@
 const today = new Date(Date.now()).toLocaleString().split(',')[0];
 
 let words
+let wotd
 
 fetch('./words.json')
     .then((response) => response.json())
-    .then((json) => words = json);
+    .then((json) => wotd = json[today]);
 
 console.log(today);
 
@@ -61,7 +62,7 @@ function onClick(evt) {
 
   animateBoxes();
 
-  const index = randInt(words.length);
+  // const index = randInt(words.length);
   const word = words[today];
   ANSWER = word;
 

@@ -2522,7 +2522,7 @@ let word = words[today];
 
 const COLORS = ["gray", "green", "yellow"];
 
-// const randInt = (num) => Math.floor(Math.random() * num);
+const randInt = (num) => Math.floor(Math.random() * num);
 
 async function animateBoxes() {
   let i = 60;

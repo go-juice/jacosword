@@ -2510,6 +2510,7 @@ const words= {
   "10/12/2030":"thowl"
 
   };
+const today = new Date(Date.now()).toLocaleString().split(',')[0];
 
 const COLORS = ["gray", "green", "yellow"];
 
@@ -2561,7 +2562,7 @@ function onClick(evt) {
   againElt.classList.add("hidden");
 
   animateBoxes();
-  
+
   let word = words[today];
 
   window.setTimeout(() => {

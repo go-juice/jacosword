@@ -2511,19 +2511,19 @@ const wordDateMap = {
     "10/12/2030":"thowl"
 };
 
-// Function to get today's date in 'MM/DD/YYYY' format
-function getFormattedDate() {
-  const today = new Date();
-  const dd = String(today.getDate()).padStart(2, '0');
-  const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-  const yyyy = today.getFullYear();
-  return mm + '/' + dd + '/' + yyyy;
-}
+// // Function to get today's date in 'MM/DD/YYYY' format
+// function getFormattedDate() {
+//   const today = new Date();
+//   const dd = String(today.getDate()).padStart(2, '0');
+//   const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+//   const yyyy = today.getFullYear();
+//   return mm + '/' + dd + '/' + yyyy;
+// }
 
 // Function to display today's word on the webpage
 function displayTodaysWord() {
   const todaysWordElement = document.getElementById('todaysWord');
-  const today = getFormattedDate();
+  const today = new Date(Date.now()).toLocaleString().split(',')[0];
 
   // Check if today's date has a word in the wordDateMap
   const todaysWord = wordDateMap[today];

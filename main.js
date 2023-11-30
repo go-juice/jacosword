@@ -2510,17 +2510,6 @@ const words= {
   "10/12/2030":"thowl"
 
   };
-const today = new Date(Date.now()).toLocaleString().split(',')[0];
-
-let word = words[today];
-
-// fetch('./words.json')
-//     .then((response) => response.json())
-//     .then((json) => word = json[today])
-//     .then(() => alert(word));
-var div = document.getElementById('result');
-
-div.innerHTML += today;
 
 const COLORS = ["gray", "green", "yellow"];
 
@@ -2572,10 +2561,8 @@ function onClick(evt) {
   againElt.classList.add("hidden");
 
   animateBoxes();
-
-  // const index = randInt(words.length);
-  // const word = words[today];
-  // ANSWER = word;
+  const today = new Date(Date.now()).toLocaleString().split(',')[0];
+  let word = words[today];
 
   window.setTimeout(() => {
     fillBoxes(word)
@@ -2585,7 +2572,7 @@ function onClick(evt) {
       .catch((err) => {
         console.error(err);
       });
-  }, 1000);
+  }, 2000);
 }
 
 document.querySelector("#generate").addEventListener("click", onClick, false);

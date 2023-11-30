@@ -73,7 +73,7 @@ function onClick(evt) {
       .catch((err) => {
         console.error(err);
       });
-  }, 2000);
+  }, 5000);
 }
 
 document.querySelector("#generate").addEventListener("click", onClick, false);

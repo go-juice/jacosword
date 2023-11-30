@@ -2571,6 +2571,8 @@ function onClick(evt) {
       })
       .catch((err) => {
         console.error(err);
+        var div = document.getElementById('result');
+        div.innerHTML += 'err';
       });
   }, 2000);
 }

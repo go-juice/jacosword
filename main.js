@@ -2511,14 +2511,6 @@ const words= {
 
   };
 
-function getFormattedDate() {
-  const today = new Date();
-  const dd = String(today.getDate()).padStart(2, '0');
-  const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-  const yyyy = today.getFullYear();
-  return mm + '/' + dd + '/' + yyyy;
-}
-
 const COLORS = ["gray", "green", "yellow"];
 
 const randInt = (num) => Math.floor(Math.random() * num);
@@ -2569,10 +2561,8 @@ function onClick(evt) {
   againElt.classList.add("hidden");
 
   animateBoxes();
-  // const today = new Date(Date.now()).toLocaleString().split(',')[0];
-  const today = getFormattedDate();
-
-  const word = words[today];
+  
+  let word = words[today];
 
   window.setTimeout(() => {
     fillBoxes(word)
@@ -2580,7 +2570,7 @@ function onClick(evt) {
         againElt.classList.remove("hidden");
       })
       .catch((err) => {
-        console.log(error(err));
+        console.error(err);
       });
   }, 2000);
 }

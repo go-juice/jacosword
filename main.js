@@ -4,7 +4,8 @@ let word
 
 fetch('./words.json')
     .then((response) => response.json())
-    .then((json) => word = json[today]);
+    .then((json) => word = json[today])
+    .then(() => alert(word));
 
 
 const COLORS = ["gray", "green", "yellow"];

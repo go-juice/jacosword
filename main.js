@@ -2507,7 +2507,7 @@ const words= {
   "10/9/2030":"jambs",
   "10/10/2030":"iliad",
   "10/11/2030":"bumpy",
-  "10/12/2030":"thowl",
+  "10/12/2030":"thowl"
 
   };
 const today = new Date(Date.now()).toLocaleString().split(',')[0];

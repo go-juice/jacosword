@@ -2562,6 +2562,7 @@ function onClick(evt) {
   const resultElt = document.querySelector("#result");
   const againElt = document.querySelector("#again");
   const msgElt = document.querySelector("#msg");
+  const lmgtfy = document.querySelector('#lmgtfy');
   genElt.classList.add("hide");
   resultElt.classList.remove("hide");
   msgElt.classList.add("hide");
@@ -2571,6 +2572,8 @@ function onClick(evt) {
 
   const today = getFormattedDate();
   const word = words[today];
+  lmgtfy.href = "https://www.google.com/search?q="+word;
+
 
   window.setTimeout(() => {
     fillBoxes(word)

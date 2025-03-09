@@ -1,13 +1,21 @@
 <?php
 session_start();
 
-// Check if timezone is already set in session
+// Sanitize timezone parameter to prevent injection attacks
 if (isset($_GET['timezone'])) {
-    $_SESSION['time'] = $_GET['timezone'];
+    // Validate the timezone to ensure it's a valid one (you can extend this list if needed)
+    $valid_timezones = DateTimeZone::listIdentifiers();
+    if (in_array($_GET['timezone'], $valid_timezones)) {
+        $_SESSION['time'] = $_GET['timezone'];
+    }
 }
 
-// Get the user's timezone from the session, or default to UTC if not set
-$timezone = isset($_SESSION['time']) ? $_SESSION['time'] : 'UTC';
+// Default to a common timezone if session is empty
+if (!isset($_SESSION['time']) || empty($_SESSION['time'])) {
+    $_SESSION['time'] = 'Pacific/Auckland';  // Change this to your actual local timezone
+}
+
+$timezone = $_SESSION['time'];
 
 // Set the endpoint URL of your Google Apps Script Web App
 $scriptUrl = 'https://script.google.com/macros/s/AKfycbzPJellfuPPxHWzsiL2nLq1_BE5SxgQ3YvdyGDEdZ3Xz28YAUu6PMSi7dOJj51RRaBH/exec';
@@ -23,13 +31,19 @@ $todayString = $today->format('m/d/Y');
 
 // Filter data to show only today's results
 $filteredData = array_filter($data, function($entry) use ($todayString, $timezone) {
-    $entryDate = new DateTime($entry['timestamp']);
-    $entryDate->setTimezone(new DateTimeZone($timezone)); // User's timezone
+    $entryDate = new DateTime($entry['timestamp'], new DateTimeZone('UTC')); // Parse as UTC
+    $entryDate->setTimezone(new DateTimeZone($timezone)); // Convert to user timezone
     return $entryDate->format('m/d/Y') === $todayString;
 });
 
 // Sort the filtered data by score
 usort($filteredData, function($a, $b) {
+  if ($a['score'] == $b['score']) {
+    // If guesses are the same, compare by timestamp (oldest to newest)
+    $aDate = new DateTime($a['timestamp'], new DateTimeZone('UTC'));
+    $bDate = new DateTime($b['timestamp'], new DateTimeZone('UTC'));
+    return $aDate <=> $bDate;
+  }
     return $a['score'] <=> $b['score'];
 });
 ?>
@@ -176,17 +190,18 @@ usort($filteredData, function($a, $b) {
       .rank-2 { background-color: #c9b458; color: white; } /* Wordle Yellow */
       .rank-3 { background-color: #787c7e; color: white; } /* Wordle Grey */
   </style>
-  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-        if("<?php echo $timezone; ?>" === "") {
-            var visitortime = new Date();
-            var visitortimezone = "GMT " + -visitortime.getTimezoneOffset()/60;
+        if (!document.cookie.includes("timezoneSet")) {
+            var visitortimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          	console.log(visitortimezone);
             $.ajax({
                 type: "GET",
                 url: "index.php",
                 data: 'timezone=' + visitortimezone,
                 success: function() {
+                    document.cookie = "timezoneSet=true; path=/"; // Prevent multiple requests
                     location.reload();
                 }
             });
@@ -246,9 +261,11 @@ usort($filteredData, function($a, $b) {
             } elseif ($rank == 3) {
                 $class = 'rank-3';
             }
+            // Sanitize nickname for output in HTML
+            $nickname = htmlspecialchars($entry['nickname'], ENT_QUOTES, 'UTF-8');
             echo "<tr class='{$class}'>
                     <td>$rank</td>
-                    <td class='nickname'>{$entry['nickname']}</td>
+                    <td class='nickname'>{$nickname}</td>
                     <td>{$entry['guesses']}</td>
                   </tr>";
             $rank++;

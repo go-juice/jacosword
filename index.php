@@ -24,6 +24,7 @@ $scriptUrl = 'https://script.google.com/macros/s/AKfycbzPJellfuPPxHWzsiL2nLq1_BE
 $response = file_get_contents($scriptUrl);
 $data = json_decode($response, true);
 
+
 // Get today's date (local time based on user's timezone)
 $today = new DateTime();
 $today->setTimezone(new DateTimeZone($timezone)); // User's timezone
@@ -31,21 +32,34 @@ $todayString = $today->format('m/d/Y');
 
 // Filter data to show only today's results
 $filteredData = array_filter($data, function($entry) use ($todayString, $timezone) {
+    // Parse the timestamp in UTC and convert to the user's timezone
     $entryDate = new DateTime($entry['timestamp'], new DateTimeZone('UTC')); // Parse as UTC
     $entryDate->setTimezone(new DateTimeZone($timezone)); // Convert to user timezone
+
+    // Compare only the date part (ignore the time)
     return $entryDate->format('m/d/Y') === $todayString;
 });
+// Initialize the final sorted array
+$finalSortedArray = [];
 
-// Sort the filtered data by score
-usort($filteredData, function($a, $b) {
-  if ($a['score'] == $b['score']) {
-    // If guesses are the same, compare by timestamp (oldest to newest)
-    $aDate = new DateTime($a['timestamp'], new DateTimeZone('UTC'));
-    $bDate = new DateTime($b['timestamp'], new DateTimeZone('UTC'));
-    return $aDate <=> $bDate;
-  }
-    return $a['score'] <=> $b['score'];
-});
+// Iterate through scores from 1 to 6
+for ($score = 1; $score <= 6; $score++) {
+    // Filter out entries with the current score
+    $filteredByScore = array_filter($filteredData, function($entry) use ($score) {
+        return $entry['guesses'] == $score;
+    });
+
+    // Sort the filtered entries by timestamp (oldest to newest)
+    usort($filteredByScore, function($a, $b) {
+        $aDate = new DateTime($a['timestamp'], new DateTimeZone('UTC'));
+        $bDate = new DateTime($b['timestamp'], new DateTimeZone('UTC'));
+        return $aDate <=> $bDate; // Compare timestamps (oldest first)
+    });
+
+    // Merge the sorted results into the final array
+    $finalSortedArray = array_merge($finalSortedArray, $filteredByScore);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -251,25 +265,25 @@ usort($filteredData, function($a, $b) {
         <?php
         // Display the leaderboard
         $rank = 1;
-        foreach ($filteredData as $index => $entry) {
-            $class = '';
-            // Highlight the top 3 entries
-            if ($rank == 1) {
-                $class = 'rank-1';
-            } elseif ($rank == 2) {
-                $class = 'rank-2';
-            } elseif ($rank == 3) {
-                $class = 'rank-3';
-            }
-            // Sanitize nickname for output in HTML
-            $nickname = htmlspecialchars($entry['nickname'], ENT_QUOTES, 'UTF-8');
-            echo "<tr class='{$class}'>
-                    <td>$rank</td>
-                    <td class='nickname'>{$nickname}</td>
-                    <td>{$entry['guesses']}</td>
-                  </tr>";
-            $rank++;
-        }
+        foreach ($finalSortedArray as $index => $entry) {
+          $class = '';
+          // Highlight the top 3 entries
+          if ($rank == 1) {
+              $class = 'rank-1';
+          } elseif ($rank == 2) {
+              $class = 'rank-2';
+          } elseif ($rank == 3) {
+              $class = 'rank-3';
+          }
+          // Sanitize nickname for output in HTML
+          $nickname = htmlspecialchars($entry['nickname'], ENT_QUOTES, 'UTF-8');
+          echo "<tr class='{$class}'>
+                  <td>$rank</td>
+                  <td class='nickname'>{$nickname}</td>
+                  <td>{$entry['guesses']}</td>
+                </tr>";
+          $rank++;
+      }
         ?>
     </tbody>
 </table>
